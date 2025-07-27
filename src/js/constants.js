@@ -1,5 +1,4 @@
-// src/constants.js
-
+//apiのurlや色の設定
 export const POKEMON_API_BASE_URL = 'https://pokeapi.co/api/v2/pokemon';
 export const POKEMON_FETCH_LIMIT = 20; // 一度に取得するポケモンの数
 
@@ -30,8 +29,8 @@ export const STAT_COLORS = {
   HP: 'bg-green-500',
   ATTACK: 'bg-red-500',
   DEFENSE: 'bg-blue-500',
-  'SPECIAL ATTACK': 'bg-orange-500', // スペースを含むのでクォーテーションで囲む
-  'SPECIAL DEFENSE': 'bg-teal-500',   // スペースを含むのでクォーテーションで囲む
+  'SPECIAL ATTACK': 'bg-orange-500',
+  'SPECIAL DEFENSE': 'bg-teal-500',
   SPEED: 'bg-purple-500',
-  DEFAULT: 'bg-gray-400', // その他のステータスのデフォルト色
+  DEFAULT: 'bg-gray-400',
 };

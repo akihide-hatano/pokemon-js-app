@@ -12,10 +12,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   let offset = 0;
   let isFetching = false;
 
+//情報を取得する際に先に現在fetchしているのかを確認しています。
   async function fetchAndDisplayPokemons() {
     if (isFetching) return;
     isFetching = true;
 
+//読み込みへの対応
     try {
       if (offset === 0) {
         loadingSpinner.classList.remove('hidden');
