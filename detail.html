@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ポケモン詳細</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+        extend: {
+            colors: {
+            'type-normal': '#A8A77A',
+            'type-fire': '#EE8130',
+            'type-water': '#6390F0',
+            'type-grass': '#7AC74C',
+            'type-electric': '#F7D02C',
+            'type-ice': '#96D9D6',
+            'type-fighting': '#C22E28',
+            'type-poison': '#A33EA1',
+            'type-ground': '#E2BF65',
+            'type-flying': '#A98FF3',
+            'type-psychic': '#F95587',
+            'type-bug': '#A6B91A',
+            'type-rock': '#B6A136',
+            'type-ghost': '#735797',
+            'type-dragon': '#6F35FC',
+            'type-steel': '#B7B7CE',
+            'type-dark': '#705746',
+            'type-fairy': '#D685AD',
+            },
+            keyframes: {
+              'fade-in': {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+            }
+            },
+            animation: {
+            'fade-in': 'fade-in 0.5s ease-out forwards',
+            }
+        }
+        }
+    }
+    </script>
+  </head>
+<body class="bg-gray-100 min-h-screen flex flex-col font-sans">
+    <header class="bg-gradient-to-r from-blue-500 to-purple-600 p-4 text-white text-center shadow-lg">
+    <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">
+        ポケモン詳細
+      </h1>
+    <p class="text-lg mt-2 opacity-90">ポケモンの詳細情報</p>
+    </header>
+
+    <main class="flex-grow container mx-auto p-6 flex justify-center items-center">
+    <div id="detail-loading-spinner" class="text-center p-8 bg-white rounded-lg shadow-xl">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mx-auto"></div>
+        <p class="mt-4 text-gray-700 text-lg font-semibold">詳細データを読み込み中...</p>
+    </div>
+
+    <div id="pokemon-detail-card" class="bg-white rounded-lg shadow-2xl p-6 w-full max-w-2xl relative hidden animate-fade-in">
+        <button id="back-button" class="absolute top-3 left-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition duration-200">
+            &larr; 一覧へ戻る
+        </button>
+
+        <h2 id="detail-pokemon-name" class="text-4xl font-bold text-center mb-6 text-gray-800 mt-12"></h2>
+
+        <div class="flex flex-col md:flex-row items-center justify-center gap-8 mb-6">
+          <img id="detail-official-artwork" src="" alt="" class="w-56 h-56 object-contain">
+          
+          <div class="text-gray-700 text-xl space-y-2">
+            <div><strong>ID:</strong> <span id="detail-pokemon-id"></span></div>
+            <div><strong>高さ:</strong> <span id="detail-pokemon-height"></span>m</div>
+            <div><strong>重さ:</strong> <span id="detail-pokemon-weight"></span>kg</div>
+            <div><strong>タイプ:</strong> <span id="detail-pokemon-types"></span></div>
+          </div>
+        </div>
+
+        <div class="border-t pt-6 mt-6">
+        <h3 class="text-2xl font-bold text-gray-800 mb-4">覚える技</h3>
+            <ul id="detail-pokemon-moves" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-base text-gray-700 max-h-60 overflow-y-auto bg-gray-50 p-4 rounded-md">
+            </ul>
+        </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 p-4 text-white text-center mt-auto shadow-inner">
+        <p class="text-sm">&copy; 2025 シンプルポケモン図鑑. Powered by PokeAPI.</p>
+    </footer>
+
+    <script type="module" src="/src/detail.js"></script>
+</body>
+</html>
