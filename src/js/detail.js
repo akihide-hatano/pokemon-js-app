@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const loadingSpinner = document.getElementById('detail-loading-spinner');
   const pokemonDetailCard = document.getElementById('pokemon-detail-card');
   const detailStatusMessage = loadingSpinner.querySelector('p');
+
+  //一覧へ戻るのbutton
   const backButton = document.getElementById('back-button');
 
   const statsContainer = document.getElementById('detail-pokemon-stats'); // 種族値コンテナ
@@ -15,12 +17,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const pokemonId = urlParams.get('id');
 
+//一覧に戻る処理
   if (backButton) {
     backButton.addEventListener('click', () => {
       window.history.back();
     });
   }
 
+//ポケモンIDがtれなかったら、待機画面消去後、errorを出す。
   if (!pokemonId) {
     loadingSpinner.classList.add('hidden');
     pokemonDetailCard.classList.add('hidden');
@@ -30,18 +34,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  loadingSpinner.classList.remove('hidden');
-  pokemonDetailCard.classList.add('hidden');
-  detailStatusMessage.textContent = '詳細データを読み込み中...';
-  detailStatusMessage.classList.remove('text-red-600');
+  else{
+    loadingSpinner.classList.remove('hidden');
+    pokemonDetailCard.classList.add('hidden');
+    detailStatusMessage.textContent = '詳細データを読み込み中...';
+    detailStatusMessage.classList.remove('text-red-600');
+  }
 
+//APIからポケモンの詳細取得
   try {
     const pokemon = await fetchPokemonDetail(parseInt(pokemonId));
 
+//スピナーを外す
     loadingSpinner.classList.add('hidden');
     pokemonDetailCard.classList.remove('hidden');
     pokemonDetailCard.classList.add('animate-fade-in');
 
+//入手したものを表示用に設定
     const formattedId = String(pokemon.id).padStart(3, '0');
     const mainType = pokemon.types[0].type.name;
     const typeBgClass = getTypeColor(mainType);
@@ -54,6 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('detail-pokemon-height').textContent = (pokemon.height / 10).toFixed(1);
     document.getElementById('detail-pokemon-weight').textContent = (pokemon.weight / 10).toFixed(1);
 
+//入手したjsonでtypeColorに合わせて色を取得(複数ある可能性があるためmap関数を使用)
     const typesContainer = document.getElementById('detail-pokemon-types');
     typesContainer.innerHTML = pokemon.types.map(typeInfo => {
       const typeName = typeInfo.type.name;
@@ -61,18 +71,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       return `<span class="${typeColor} text-white text-sm font-semibold px-3 py-1 rounded-full capitalize shadow-sm">${typeName}</span>`;
     }).join(' ');
 
+//入手したjsonでmoveListに合わせて色を取得(複数ある可能性があるためmap関数を使用)
     const movesList = document.getElementById('detail-pokemon-moves');
     movesList.innerHTML = pokemon.moves.map(moveInfo => `
       <li class="bg-gray-100 p-2 rounded-md shadow-sm capitalize">${moveInfo.move.name}</li>
     `).join('');
 
-    // HTMLの#pokemon-detail-card に bg-white が設定されているため、背景色の適用はしない
-    // もしカード全体の背景色もタイプによって変えたい場合は、HTMLから bg-white を削除し、
-    // pokemonDetailCard.classList.add(typeBgClass); を追加する必要があります。
-    // 現状はカード内の各要素の背景色のみタイプ色を適用します。
 
-
-    // ★★★ 種族値の表示処理を追加 ★★★
+// ★★★ 種族値の表示処理を追加 ★★★
     statsContainer.innerHTML = pokemon.stats.map(statInfo => {
       const statName = statInfo.stat.name.replace('-', ' ').toUpperCase(); // 名前を整形 (例: hp -> HP)
       const baseStat = statInfo.base_stat;
@@ -92,8 +98,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
       `;
     }).join('');
-    // ★★★ 種族値の表示処理はここまで ★★★
 
+//tryに入らない場合の設定
   } catch (error) {
     loadingSpinner.classList.add('hidden');
     pokemonDetailCard.classList.add('hidden');
