@@ -4,8 +4,8 @@ import { getTypeColor } from './ui.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   // ★ 修正: DOM要素のIDを detail.html に合わせる
-  const loadingSpinner = document.getElementById('detail-loading-spinner');
-  const pokemonDetailCard = document.getElementById('pokemon-detail-card');
+    const loadingSpinner = document.getElementById('detail-loading-spinner');
+    const pokemonDetailCard = document.getElementById('pokemon-detail-card');
 
   // HTMLに直接エラーメッセージ表示用の要素がないため、スピナーの領域を流用するか
   // もしくは新しい要素を動的に作成/既存の場所に挿入する形を取ります。
