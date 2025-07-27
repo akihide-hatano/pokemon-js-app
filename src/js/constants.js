@@ -24,3 +24,14 @@ export const TYPE_COLORS = {
   dark: '#705746',
   fairy: '#D685AD',
 };
+
+// ポケモンの種族値ごとの色（Tailwind CSSのクラス名）
+export const STAT_COLORS = {
+  HP: 'bg-green-500',
+  ATTACK: 'bg-red-500',
+  DEFENSE: 'bg-blue-500',
+  'SPECIAL ATTACK': 'bg-orange-500', // スペースを含むのでクォーテーションで囲む
+  'SPECIAL DEFENSE': 'bg-teal-500',   // スペースを含むのでクォーテーションで囲む
+  SPEED: 'bg-purple-500',
+  DEFAULT: 'bg-gray-400', // その他のステータスのデフォルト色
+};

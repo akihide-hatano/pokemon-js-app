@@ -1,5 +1,5 @@
 //ポケモンのタイプに応じた色を適応
-import { TYPE_COLORS } from "./constants";
+import { TYPE_COLORS,STAT_COLORS } from "./constants";
 
 /**
  * ポケモンのメインタイプに基づいて、Tailwind CSSの背景色クラスを生成するヘルパー関数
@@ -53,5 +53,18 @@ export function createPokemonCard(pokemon){
   `;
 
   return card; // 作成したカード要素を返す
+}
+
+/**
+ * ポケモンの種族名に基づいて、Tailwind CSSの背景色クラスを生成するヘルパー関数
+ * @param {string} statName - 種族値の名前（例: 'hp', 'attack', 'defense'）
+ * @returns {string} Tailwind CSSの背景色クラス名（例: 'bg-green-500'）
+ */
+export function getStatColorClass(statName) {
+  const formattedStatName = statName.replace('-', ' ').toUpperCase();
+
+  // ★ STAT_COLORS オブジェクトから直接色を取得
+  // キーが存在しない場合は、STAT_COLORS.DEFAULT を使用
+  return STAT_COLORS[formattedStatName] || STAT_COLORS.DEFAULT;
 }
 

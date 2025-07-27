@@ -1,7 +1,7 @@
 // src/detail.js
 
 import { fetchPokemonDetail } from './api.js';
-import { getTypeColor } from './ui.js';
+import { getTypeColor,getStatColorClass } from './ui.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const loadingSpinner = document.getElementById('detail-loading-spinner');
@@ -79,21 +79,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       const maxStatValue = 255; // 種族値の最大値を仮定 (ハピナスのHPが255)
       const barWidthPercentage = (baseStat / maxStatValue) * 100;
 
-      // ステータスに応じた棒グラフの色を決定
-      let statColorClass = 'bg-gray-400'; // デフォルト
-      if (statName === 'HP') {
-        statColorClass = 'bg-green-500';
-      } else if (statName === 'ATTACK') {
-        statColorClass = 'bg-red-500';
-      } else if (statName === 'DEFENSE') {
-        statColorClass = 'bg-blue-500';
-      } else if (statName === 'SPECIAL ATTACK') {
-        statColorClass = 'bg-orange-500';
-      } else if (statName === 'SPECIAL DEFENSE') {
-        statColorClass = 'bg-teal-500';
-      } else if (statName === 'SPEED') {
-        statColorClass = 'bg-purple-500';
-      }
+      // ★ 変更2: getStatColorClass 関数を呼び出して色クラスを取得
+      const statColorClass = getStatColorClass(statName);
 
       return `
         <div class="flex items-center gap-2">
