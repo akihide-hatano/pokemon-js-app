@@ -34,7 +34,7 @@ export async function fetchPokemonDetail(pokemonId){
  try{
     const response = await fetch(`${POKEMON_API_BASE_URL}/${pokemonId}`);
 
-    //レスポンスがOKでなければエラーとする
+    //レスポンスがOKでない場合errorを投げる
     if( !response.ok){
         throw new Error(`エラーです:${response.status}`);
     }

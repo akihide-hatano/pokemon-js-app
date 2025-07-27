@@ -9,9 +9,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const detailStatusMessage = loadingSpinner.querySelector('p');
   const backButton = document.getElementById('back-button');
 
-  // ★ 新しく追加するDOM要素の取得
   const statsContainer = document.getElementById('detail-pokemon-stats'); // 種族値コンテナ
 
+// index.htmlからdetail.htmlへパラメータ（ポケモンのID）を渡す際に必要な処理
   const urlParams = new URLSearchParams(window.location.search);
   const pokemonId = urlParams.get('id');
 
