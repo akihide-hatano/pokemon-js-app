@@ -31,16 +31,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const pokemonList = await fetchPokemonList(offset, POKEMON_FETCH_LIMIT);
 
+//全てのポケモンを読み込めれた場合
       if (pokemonList.length === 0) {
         loadMoreButton.textContent = 'これ以上ポケモンはいません';
         loadMoreButton.disabled = true;
         loadMoreButton.classList.remove('animate-pulse');
         if (offset === 0) {
-           loadingSpinner.innerHTML = '<p class="text-gray-600 text-lg">表示できるポケモンがいません。</p>';
+          loadingSpinner.innerHTML = '<p class="text-gray-600 text-lg">表示できるポケモンがいません。</p>';
         }
         return;
       }
 
+//1つ1つのポケモンのidを抜き出し、detail.htmlに設定する
       for (const pokemon of pokemonList) {
         const idMatch = pokemon.url.match(/\/(\d+)\/$/);
         const pokemonId = idMatch ? parseInt(idMatch[1]) : null;
