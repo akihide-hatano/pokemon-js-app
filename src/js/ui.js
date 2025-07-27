@@ -1,26 +1,17 @@
-// APIのベースURLを定義した定数ファイルをインポート
-import { POKEMON_API_BASE_URL } from './constants';
+//ポケモンのタイプに応じた色を適応
+import { TYPE_COLORS } from "./constants";
 
 /**
- * 指定されたポケモンIDのデータをPokeAPIから取得する関数
- * @param {number} pokemonId - 取得したいポケモンのID
- * @returns {Promise<object>} ポケモンの詳細データを含むPromise
- * @throws {Error} HTTPエラーが発生した場合
+ * ポケモンのメインタイプに基づいて、Tailwind CSSの背景色クラスを生成するヘルパー関数
+ * @param {string} typeName - ポケモンのタイプ名（例: 'fire', 'water', 'grass'）
+ * @returns {string} Tailwind CSSの背景色クラス名（例: 'bg-type-fire'）
  */
 
-export async function fetchPokemonDetail(pokemonId){
-  try{
-    const response = await fetch(`${POKEMON_API_BASE_URL}/${pokemonId}`);
-
-    //レスポンスがOKでなければエラーとする
-    if( !response.ok){
-      throw new Error(`エラーです:${response.status}`);
-    }
-    return await response.json();
+export function getTypeColor(typeName){
+  if(TYPE_COLORS[typeName]){
+    return `bg-type-${typeName}`;
   }
-  catch(error){
-    //fetchが失敗した場合
-    console.error(`fetchでerrorを起こしています。${pokemonId}`);
-    throw error;
+  else{
+    return 'bg-gray-500';
   }
 }
