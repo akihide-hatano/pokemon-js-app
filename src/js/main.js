@@ -1,34 +1,87 @@
+// src/main.js の全コード (再掲)
 
-import { fetchPokemonDetail } from './api';
+import { POKEMON_FETCH_LIMIT } from './constants.js';
+import { createPokemonCard } from './ui.js';
+import { fetchPokemonDetail } from './api.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-  console.log('--- main.js 起動: fetchPokemonDetail のテスト ---');
+  const loadingSpinner = document.getElementById('loading-spinner');
+  const pokemonContainer = document.getElementById('pokemon-container');
+  const loadMoreButton = document.getElementById('load-more-button');
+  const loadMoreArea = document.getElementById('load-more-area');
 
-  // テストケース1: 存在するIDのポケモン（フシギダネ - ID: 1）
-  try {
-    const pokemonId1 = 1;
-    console.log(`[テスト1] ポケモンID ${pokemonId1} の詳細データを取得中...`);
-    const data1 = await fetchPokemonDetail(pokemonId1);
-    console.log(`[テスト1] ポケモンID ${pokemonId1} のデータが取得できました:`, data1);
-    console.log(`[テスト1] 名前: ${data1.name.charAt(0).toUpperCase() + data1.name.slice(1)}`);
-    console.log(`[テスト1] 高さ: ${data1.height / 10} m`);
-    console.log(`[テスト1] 重さ: ${data1.weight / 10} kg`);
-  } catch (error) {
-    console.error(`[テスト1] ポケモンID 1 のデータ取得中にエラーが発生しました:`, error);
+  let offset = 0;
+  let isFetching = false;
+
+  async function fetchAndDisplayPokemons() {
+    if (isFetching) return;
+    isFetching = true;
+
+    try {
+      if (offset === 0) {
+        loadingSpinner.classList.remove('hidden');
+        pokemonContainer.classList.add('hidden');
+        loadMoreArea.classList.add('hidden');
+      } else {
+        loadMoreButton.textContent = '読み込み中...';
+        loadMoreButton.disabled = true;
+        loadMoreButton.classList.add('animate-pulse');
+      }
+
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${POKEMON_FETCH_LIMIT}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      const pokemonList = data.results;
+
+      if (pokemonList.length === 0) {
+        loadMoreButton.textContent = 'これ以上ポケモンはいません';
+        loadMoreButton.disabled = true;
+        loadMoreButton.classList.remove('animate-pulse');
+        if (offset === 0) {
+           loadingSpinner.innerHTML = '<p class="text-gray-600 text-lg">表示できるポケモンがいません。</p>';
+        }
+        return;
+      }
+
+      for (const pokemon of pokemonList) {
+        const idMatch = pokemon.url.match(/\/(\d+)\/$/);
+        const pokemonId = idMatch ? parseInt(idMatch[1]) : null;
+
+        if (pokemonId) {
+            const detailData = await fetchPokemonDetail(pokemonId);
+            const pokemonCard = createPokemonCard(detailData); // ui.js の関数を呼び出し
+            
+            pokemonCard.addEventListener('click', () => {
+              window.location.href = `detail.html?id=${detailData.id}`;
+            });
+
+            pokemonContainer.appendChild(pokemonCard);
+        }
+      }
+
+      loadingSpinner.classList.add('hidden');
+      pokemonContainer.classList.remove('hidden');
+      loadMoreArea.classList.remove('hidden');
+      loadMoreButton.textContent = 'もっとポケモンを見る';
+      loadMoreButton.disabled = false;
+      loadMoreButton.classList.remove('animate-pulse');
+
+      offset += POKEMON_FETCH_LIMIT;
+
+    } catch (error) {
+      console.error('ポケモンデータの読み込みに失敗しました:', error);
+      loadingSpinner.innerHTML = '<p class="text-red-600 text-lg">データの読み込み中にエラーが発生しました。時間を置いて再度お試しください。</p>';
+      loadingSpinner.classList.remove('hidden');
+      pokemonContainer.classList.add('hidden');
+      loadMoreButton.disabled = true;
+      loadMoreButton.classList.remove('animate-pulse');
+    } finally {
+      isFetching = false;
+    }
   }
 
-  console.log('------------------------------------');
-
-  // テストケース2: 存在しないIDのポケモン（ID: 99999）
-  try {
-    const pokemonId2 = 99999;
-    console.log(`[テスト2] ポケモンID ${pokemonId2} の詳細データを取得中（エラーを期待）...`);
-    const data2 = await fetchPokemonDetail(pokemonId2);
-    // ここはエラーが投げられるため、通常は実行されません
-    console.log(`[テスト2] 存在しないID ${pokemonId2} のデータが取得できてしまいました:`, data2);
-  } catch (error) {
-    console.error(`[テスト2] ポケモンID ${99999} のデータ取得中に期待通りエラーが発生しました:`, error.message);
-  }
-
-  console.log('--- main.js テスト終了 ---');
+  fetchAndDisplayPokemons();
+  loadMoreButton.addEventListener('click', fetchAndDisplayPokemons);
 });

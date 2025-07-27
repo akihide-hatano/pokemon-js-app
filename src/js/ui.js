@@ -28,7 +28,7 @@ export function createPokemonCard(pokemon){
   // ポケモンのメインタイプを取得（最初のタイプを使用）
   const mainType = pokemon.types[0].type.name;
   // メインタイプに基づいて背景色クラスを取得
-  const typeBgClass = getTypeColorClass(mainType);
+  const typeBgClass = getTypeColor(mainType);
 
 // カード要素（div）を作成し、Tailwind CSSクラスを適用
   const card = document.createElement('div');
@@ -46,7 +46,7 @@ export function createPokemonCard(pokemon){
     <div class="flex flex-wrap justify-center gap-2">
       ${pokemon.types.map(typeInfo => {
         const typeName = typeInfo.type.name;
-        const typeColorClass = getTypeColorClass(typeName); // 各タイプの背景色を取得
+        const typeColorClass = getTypeColor(typeName); // 各タイプの背景色を取得
         return `<span class="${typeColorClass} text-xs font-semibold px-3 py-1 rounded-full shadow-md capitalize">${typeName}</span>`;
       }).join('')}
     </div>
