@@ -1,8 +1,7 @@
-// src/main.js の全コード (再掲)
-
+//必要なものをimport
 import { POKEMON_FETCH_LIMIT } from './constants.js';
 import { createPokemonCard } from './ui.js';
-import { fetchPokemonDetail } from './api.js';
+import { fetchPokemonDetail, fetchPokemonList } from './api.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const loadingSpinner = document.getElementById('loading-spinner');
@@ -28,12 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadMoreButton.classList.add('animate-pulse');
       }
 
-      const response = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${POKEMON_FETCH_LIMIT}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      const pokemonList = data.results;
+      const pokemonList = await fetchPokemonList(offset, POKEMON_FETCH_LIMIT);
 
       if (pokemonList.length === 0) {
         loadMoreButton.textContent = 'これ以上ポケモンはいません';
@@ -51,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (pokemonId) {
             const detailData = await fetchPokemonDetail(pokemonId);
-            const pokemonCard = createPokemonCard(detailData); // ui.js の関数を呼び出し
+            const pokemonCard = createPokemonCard(detailData);
             
             pokemonCard.addEventListener('click', () => {
               window.location.href = `detail.html?id=${detailData.id}`;

@@ -47,7 +47,7 @@ export function createPokemonCard(pokemon){
       ${pokemon.types.map(typeInfo => {
         const typeName = typeInfo.type.name;
         const typeColorClass = getTypeColor(typeName); // 各タイプの背景色を取得
-        return `<span class="${typeColorClass} text-xs font-semibold px-3 py-1 rounded-full shadow-md capitalize">${typeName}</span>`;
+        return `<span class=" text-xs font-semibold px-3 py-1 rounded-full  capitalize">${typeName}</span>`;
       }).join('')}
     </div>
   `;
