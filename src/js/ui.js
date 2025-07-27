@@ -38,6 +38,20 @@ export function createPokemonCard(pokemon){
   // ポケモンのIDを3桁の形式にフォーマット（例: 001, 025）
   const formattedId = String(pokemon.id).padStart(3, '0');
 
-  
+  // カード内部のHTML構造を構築
+  card.innerHTML = `
+    <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}" class="w-32 h-32 mx-auto mb-2 object-contain filter drop-shadow-md">
+    <h2 class="text-2xl font-bold mb-1">${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h2>
+    <p class="text-lg mb-2 text-gray-200">(#${formattedId})</p>
+    <div class="flex flex-wrap justify-center gap-2">
+      ${pokemon.types.map(typeInfo => {
+        const typeName = typeInfo.type.name;
+        const typeColorClass = getTypeColorClass(typeName); // 各タイプの背景色を取得
+        return `<span class="${typeColorClass} text-xs font-semibold px-3 py-1 rounded-full shadow-md capitalize">${typeName}</span>`;
+      }).join('')}
+    </div>
+  `;
+
+  return card; // 作成したカード要素を返す
 }
 
